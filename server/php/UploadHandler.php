@@ -34,7 +34,10 @@ class UploadHandler
         'min_width' => 'Image requires a minimum width',
         'max_height' => 'Image exceeds maximum height',
         'min_height' => 'Image requires a minimum height',
-        'abort' => 'File upload aborted',
+        // this abort will usually imply the .csv was not converted properly
+        // BUT it doesn't necessarily mean conversion failed. 'abort' is used by some other error
+        'abort_convert' => 'File conversion failed, make sure the .csv is formatted properly.',
+        'abort' => 'File upload failed. Unkno',
         'image_resize' => 'Failed to resize image'
     );
 
@@ -46,10 +49,12 @@ class UploadHandler
             'script_url' => $this->get_full_url().'/'.$this->basename($this->get_server_var('SCRIPT_NAME')),
             'upload_dir' => dirname($this->get_server_var('SCRIPT_FILENAME')).'/files/',
             'upload_url' => $this->get_full_url().'/files/',
+            'convert_url' => $this->get_full_url().'/converted_files/',
             'input_stream' => 'php://input',
             'user_dirs' => false,
             'mkdir_mode' => 0755,
             'param_name' => 'files',
+            'relative_upload_dir' => 'files/',
             // Set the following option to 'POST', if your server does not support
             // DELETE requests. This is a parameter sent to the client:
             'delete_type' => 'DELETE',
@@ -1109,7 +1114,22 @@ class UploadHandler
             $file_size = $this->get_file_size($file_path, $append_file);
             if ($file_size === $file->size) {
                 chmod($file_path, 0644);
-                $file->url = $this->get_download_url($file->name);
+                // .csv file should've been successfully uploaded,
+                // Now, run the Python conversion script
+                $out = exec("python converter.py " . base64_encode($this->options['relative_upload_dir'] . basename($file_path)));
+                if (strpos($out, '1023 is source') !== false) {
+                    // successful
+                    // unlink($file_path);
+                    // $file->error = $this->get_error_message('abort');
+                    
+                }
+                else {
+                    // failed to convert file
+                    // unlink($file_path);
+                    $file->error = $this->get_error_message('abort_convert');
+                    return $file;
+                }
+                $file->url = $this->get_download_url($file->name) . ".json";
                 if ($this->is_valid_image_file($file_path)) {
                     $this->handle_image_file($file_path, $file);
                 }

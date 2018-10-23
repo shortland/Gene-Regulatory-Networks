@@ -517,12 +517,12 @@ $ ->
 
   $("#song_select").on "change", (e) ->
     songFile = $(this).val()
-    d3.json "data/#{songFile}", (json) ->
+    d3.json "server/php/files/#{songFile}", (json) ->
       myNetwork.updateData(json)
   
   $("#search").keyup () ->
     searchTerm = $(this).val()
     myNetwork.updateSearch(searchTerm)
 
-  d3.json "data/default_data.csv.json", (json) ->
+  d3.json "server/php/files/default_data.csv.json", (json) ->
     myNetwork("#vis", json)

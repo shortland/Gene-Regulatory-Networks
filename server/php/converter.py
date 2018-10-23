@@ -2,11 +2,13 @@ from collections import defaultdict
 import csv
 import json
 import sys
+import os
+import base64
 
-print("%s is the file to convert" % sys.argv[1])
 
-filename = sys.argv[1];
 
+filename = base64.b64decode(sys.argv[1])
+print("%s is the file to convert" % filename)
 # create dictionary to hold the data in 'json' format
 data = defaultdict(list)
 
@@ -34,6 +36,8 @@ with open("%s" % filename) as csv_file:
         })
 
 json = json.dumps(data)
+
+os.chmod(filename, 0o777)
 
 f = open("%s.json" % filename, "w+")
 f.write(json)
