@@ -1,16 +1,14 @@
-body {
-  font-family: Arial, sans-serif;
-}
+@charset "UTF-8";
 
-a, a:visited {
-  color: #4d4d4d;
-  text-decoration: underline;
+body {
+  padding-top: 50px;
+  font-family: Arial, sans-serif;
 }
 
 #container {
   width: 100%;
-  padding: 5px 0 10px 0;
-  margin: auto;
+  padding: 0px 0px 0px 0px;
+  margin: 0px 0px 0px 0px;
 }
 
 #main {
@@ -19,13 +17,17 @@ a, a:visited {
 
 #controls {
   width: 100%;
-  float: left;
   margin-bottom: 10px;
+}
+
+.modal_items {
+  display: none;
 }
 
 .control {
   float: left;
-  padding-left: 20px;
+  padding-left: 40px;
+  display: none;
 }
 
 .control a {
@@ -36,10 +38,6 @@ a, a:visited {
   cursor: pointer;
   margin-right: 3px;
   text-decoration: none;
-}
-
-.control a:hover {
-  text-decoration: underline;
 }
 
 .control a.active {
