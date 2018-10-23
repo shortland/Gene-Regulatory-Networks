@@ -16,17 +16,20 @@
         return filemtime($a) < filemtime($b);
     });
 
+    var_dump($newlist);
+
     $i = 1;
     foreach ($newlist as $name) {
         $modified = date ("F d, H:i", filemtime($name));
-        $original_name = $name;
+        $realPath = $name;
         $name = preg_replace('/\.csv.json$/i', '.json', $name);
-        $name = preg_replace('/server\/php\/files\/$/i', '', $name);
+        $nameClean = preg_replace('/server\/php\/files\//i', '', $name);
+        $realPath = preg_replace('/server\/php\/files\//i', '', $realPath);
         $extra = "";
         if ($i == sizeof($newlist)) {
             $extra = ' selected="selected"';
         }
-        echo '<option value="' . $original_name . '"' . $extra . '>' . $name . ' [' . $modified . ']</option>';
+        echo '<option value="' . $realPath . '"' . $extra . '>' . $nameClean . ' [' . $modified . ']</option>';
         $i++;
     }
 ?>
