@@ -527,6 +527,7 @@
         },
 
         _initIframeSettings: function (options) {
+            //alert("used" + options.url);
             var targetHost = $('<a></a>').prop('href', options.url).prop('host');
             // Setting the dataType to iframe enables the iframe transport:
             options.dataType = 'iframe ' + (options.dataType || '');
@@ -878,6 +879,7 @@
             response.result = options.result = result;
             response.textStatus = options.textStatus = textStatus;
             response.jqXHR = options.jqXHR = jqXHR;
+            response.realName = options.realName = result.files[0].name;
             this._trigger('done', null, options);
         },
 

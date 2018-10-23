@@ -30,8 +30,8 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="#upload" id="controls_toggle_upload" data-toggle="modal" data-target="#controlsModal">Upload</a></li>
-                    <li><a href="#select" id="controls_toggle_select">Select Data File</a></li>
-                    <li><a href="#options" id="controls_toggle_upload">Display Options</a></li>
+                    <li><a href="#select" id="controls_toggle_select" data-toggle="modal" data-target="#controlsModal">Select Data File</a></li>
+                    <li><a href="#options" id="controls_toggle_options" data-toggle="modal" data-target="#controlsModal">Display Options</a></li>
                     <li><a target="_blank" href="https://github.com/rAntonioh/D3_python_attractor_networks">Source Code</a></li>
 
                 </ul>
@@ -52,32 +52,8 @@
           Nodes are colored by "artist"
         -->
 
-
-
-
-        <div id="view_data_selection" class="control">
-            <h3>Select Data File</h3>
-            <select id="song_select">
-                <?php
-                    $dir = "data/";
-                    $list = scandir($dir, 1);
-
-                    foreach ($list as $name) {
-                        if (strpos($name, '.csv.json') !== false) {
-                            $name = preg_replace('/\.csv.json$/i', '.json', $name);
-                            echo '<option value="' . $name . '">' . $name . '</option>';
-                        }
-                    }
-                ?>
-            </select>
-        </div>
-
         <div id="controls">
-            <div id="view_display_selection" class="control">
-                <h3>Display Options:</h3>
-                <a id="force" class="active">Loose</a> <!-- Source to Target -->
-                <a id="radial">Compact</a> <!-- Group Radially By "Artist" -->
-            </div>
+
     <!--
           <div id="filters" class="control">
             <h3>Filter</h3>
@@ -129,15 +105,36 @@
                     <!-- The file input field used as target for the file upload widget -->
                     <input id="fileupload" type="file" accept=".csv" name="files[]" multiple>
                 </span>
-                <br>
+                <br><br>
                 <div id="files" class="files"></div>
             </div>
             <!-- end upload view -->
+
+            <!-- start select-data-file view -->
+            <div id="view_data_selection" class="modal_items">
+                <h3>Select Data File</h3>
+                <select class="form-control" id="song_select">
+                    <!-- jquery ajax gets this, toolbar.js -->
+                </select>
+                <br><br>
+            </div>
+            <!-- end select-data-file view -->
+
+            <!-- start view options view -->
+            <div id="view_display_selection" class="modal_items">
+                <h3>Display Options</h3>
+                <button type="button" class="btn btn-success active" id="force">Loose</button>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-warning" id="radial">Compact</button>
+            </div>
+            <!-- end view options view -->
             </center>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+            <!--
+            <button id="modal_save_button" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+            -->
           </div>
         </div>
       </div>

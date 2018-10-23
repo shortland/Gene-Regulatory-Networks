@@ -515,6 +515,12 @@ $ ->
     activate("sorts", newSort)
     myNetwork.toggleSort(newSort)
 
+#  $("#modal_save_button").on "click", (e) ->
+#    if $("#exampleModalLabel").val() == "Select Data File" 
+#      songFile = $("#song_select").val()
+#      d3.json "server/php/files/#{songFile}", (json) ->
+#        myNetwork.updateData(json)
+
   $("#song_select").on "change", (e) ->
     songFile = $(this).val()
     d3.json "server/php/files/#{songFile}", (json) ->
