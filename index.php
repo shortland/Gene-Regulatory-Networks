@@ -17,11 +17,34 @@
 </head>
 
 <body>
-
+<div class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-fixed-top .navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Attractor Network</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="#">Upload</a></li>
+                <li><a href="#">Select Data File</a></li>
+                <li><a href="#">Display Options</a></li>
+            <!--
+                <li><a href="https://github.com/rAntonioh/D3_python_attractor_networks">Source Code</a></li>
+            -->
+            </ul>
+        </div>
+    </div>
+</div>
   <div id="container" class="container">
+    <!-- 
     <header>
       <h1>&nbsp;Attractor Network</h1>
-    </header>
+    </header> 
+    -->
 
     <!--
       Nodes are sized based on "playcounts"
