@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Attractor Network</title>
+    <title>Gene Regulatory Network State Space</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <!-- CSS concatenated and minified via ant build script-->
     <link rel="stylesheet" href="css/reset.css">
@@ -25,14 +25,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Attractor Network</a>
+                <a class="navbar-brand" href="#">Gene Regulatory Network State Space</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="#upload" id="controls_toggle_upload" data-toggle="modal" data-target="#controlsModal">Upload</a></li>
                     <li><a href="#select" id="controls_toggle_select" data-toggle="modal" data-target="#controlsModal">Select Data File</a></li>
                     <li><a href="#options" id="controls_toggle_options" data-toggle="modal" data-target="#controlsModal">Display Options</a></li>
-                    <li><a target="_blank" href="https://github.com/rAntonioh/D3_python_attractor_networks">Source Code</a></li>
+                    <li><a target="_blank" href="https://github.com/rAntonioh/gene_regulatory_networks">source code</a></li>
 
                 </ul>
 <!--                 <ul class="nav navbar-nav">
@@ -44,31 +44,24 @@
     <div id="container" class="container">
         <!-- 
         <header>
-          <h1>&nbsp;Attractor Network</h1>
+          <h1>&nbsp;Gene Regulatory Network State Space</h1>
         </header> 
         -->
-        <!--
-          Nodes are sized based on "playcounts"
-          Nodes are colored by "artist"
-        -->
-
         <div id="controls">
-
-    <!--
+   
           <div id="filters" class="control">
             <h3>Filter</h3>
             <a id="all" class="active">All</a>
-            <a id="popular">Popular</a>
-            <a id="obscure">Obscure</a>
+            <a id="similarity">Similarity</a>
+            <a id="steady state">Steady State</a>
           </div>
 
           <div id="sorts" class="control">
             <h3>Sort</h3>
-            <a id="songs" class="active">Songs</a>
-            <a id="links">Links</a>
+            <a id="path length" class="active">Path Length</a>
+            <a id="shared clusters">Shared Cluster</a>
           </div>
-    -->
-    <!--
+       <!--
           <div id="search_section" class="control">
             <form id="search_form" action=""  method="post">
               <p class="search_title">Search <input type="text" class="text-input" id="search" value="" /></p>
@@ -113,7 +106,7 @@
             <!-- start select-data-file view -->
             <div id="view_data_selection" class="modal_items">
                 <h3>Select Data File</h3>
-                <select class="form-control" id="song_select">
+                <select class="form-control" id="data_select">
                     <!-- jquery ajax gets this, toolbar.js -->
                 </select>
                 <br><br>
