@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Attractor Network</title>
+    <title>Gene Regulatory Network State Space</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <!-- CSS concatenated and minified via ant build script-->
     <link rel="stylesheet" href="css/reset.css">
@@ -25,7 +25,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Attractor Network</a>
+                <a class="navbar-brand" href="#">Gene Regulatory Network State Space</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -48,7 +48,7 @@
         </header> 
         -->
         <div id="controls">
-    <!--
+   
           <div id="filters" class="control">
             <h3>Filter</h3>
             <a id="all" class="active">All</a>
@@ -61,8 +61,7 @@
             <a id="path length" class="active">Path Length</a>
             <a id="shared clusters">Shared Cluster</a>
           </div>
-    -->
-    <!--
+       <!--
           <div id="search_section" class="control">
             <form id="search_form" action=""  method="post">
               <p class="search_title">Search <input type="text" class="text-input" id="search" value="" /></p>
