@@ -86,8 +86,6 @@
                 <div id="mynetwork"></div>
 <!--<script id="dynamic_data" type="application/json" src="server/php/files/attractor (4).csv.json"></script>-->
 <script type="text/javascript">
-
-
     var color = 'gray';
     var len = undefined;
     var nodes = [];
@@ -99,6 +97,7 @@
         nodes: nodes,
         edges: edges
     };
+
     var options = {
         nodes: {
             shape: 'dot',
@@ -107,10 +106,7 @@
                 size: 24,
                 color: '#000'
             },
-            borderWidth: 2
-        },
-        edges: {
-            width: 2
+            borderWidth: 1
         },
         interaction: {
             navigationButtons: true,
@@ -118,12 +114,22 @@
             zoomView: false
         },
         layout: {
-          improvedLayout: false
+          improvedLayout: true
+        },
+        physics: {
+          stabilization: false,
+          minVelocity: 1,
+          maxVelocity: 20,
+          timestep: 1
+        },
+        edges: {
+          smooth: false,
+          width: 2
         }
     };
     //network = new vis.Network(container, data, options);
 </script>
-                <div id="vis" style="zoom:25%;"></div>
+                
             </div>
         </div> 
         <!-- end controls -->
@@ -223,19 +229,25 @@
     <!-- The File Upload validation plugin -->
     <script src="js/jquery.fileupload-validate.js"></script>
     <script>
-    $.getJSON( "server/php/files/attractor (4).csv.json", function( data ) {
-      var node_list = data['nodes'];
-      var edge_list = data['edges'];
+    function changeCursor(newCursorStyle){
+      networkCanvas.style.cursor = newCursorStyle;
+    }
+    $.getJSON( "server/php/files/attractor%20%287%29.csv.json", function( data ) {
+      nodes = data['nodes'];
+      edges = data['edges'];
       
-      $.each( node_list, function( key, value ) {
-        nodes.push(value);
-      });
+      // $.each( node_list, function( key, value ) {
+      //   nodes.push(value);
+      // });
 
-      $.each( edge_list, function( key, value ) {
-        edges.push(value);
-      });
+      // $.each( edge_list, function( key, value ) {
+      //   edges.push(value);
+      // });
 
       network = new vis.Network(container, data, options);
+      network.on('hoverNode', function () {
+        changeCursor('grab');
+      });
     });
     /**
     *   Part of jQuery-File-Upload,
