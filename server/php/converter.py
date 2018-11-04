@@ -22,15 +22,12 @@ with open("%s" % filename) as csv_file:
 
         print('%s is source %s is target' % (row[0], row[1]))
 
-        data['links'].append({"source": row[0], "target": row[1]})
+        data['edges'].append({"from": row[0], "to": row[1]})
 
         data['nodes'].append({
             "id": row[0],
-            "name": str(row[0]),
-            "match": 1.0,
-            "artist": "Dummy",
-            "playcount": 1000000,
-            "origin": str(row[2]) # make it colored by this and NOT artist
+            "label": str(row[0]),
+            "group": row[2],
         })
 
 json = json.dumps(data)
