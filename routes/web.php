@@ -28,8 +28,13 @@ $router->post('token',  [
     //'middleware' => "scope:all"
 ]);
 
-$router->get('files',  [
-    'uses'       => 'NetworkController@list'//,
+$router->get('list_networks',  [
+    'uses'       => 'PublicNetworkController@list'//,
+    //'middleware' => "scope:all"
+]);
+
+$router->post('modify_network',  [
+    'uses'       => 'PrivateNetworkController@modify'//,
     //'middleware' => "scope:all"
 ]);
 

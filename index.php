@@ -239,16 +239,16 @@
     <script src="js/jquery.fileupload-validate.js"></script>
     <!-- base64 -->
     <script src="js/base64.js"></script>
+    <!-- polling -->
+    <script src="js/api.polling.js"></script>
     <script>
-    $("#load_new_network").click(function(){
-      //alert($("#song_select").val());
-      //alert(Base64.encode($("#song_select").val()));
+    $("#load_new_network").click(function() {
       load_new_network($("#song_select").val());
     });
 
     function load_new_network(fileName) {
       $.getJSON( "server/php/files/" + fileName, function( data ) {
-        var network_id = Base64.encode(decodeURI(fileName));
+        var network_id = Base64.encode(encodeURI(fileName));
         $("#api_stream_id").val(network_id);
         nodes = data['nodes'];
         edges = data['edges'];
@@ -256,20 +256,6 @@
       });
     }
 
-    // $.getJSON( "server/php/files/attractor%20%287%29.csv.json", function( data ) {
-    //   nodes = data['nodes'];
-    //   edges = data['edges'];
-      
-    //   // $.each( node_list, function( key, value ) {
-    //   //   nodes.push(value);
-    //   // });
-
-    //   // $.each( edge_list, function( key, value ) {
-    //   //   edges.push(value);
-    //   // });
-
-    //   network = new vis.Network(container, data, options);
-    // });
     /**
     *   Part of jQuery-File-Upload,
     *   Below script must be after the inclusion of the necessary .js files for this lib
