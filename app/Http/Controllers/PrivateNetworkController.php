@@ -16,6 +16,23 @@ class PrivateNetworkController extends Controller
         return str_random('32');;
     }
 
+    public function deleteFile(Request $request)
+    {
+        $inputs = $request->all();
+
+        if (!isset($inputs['token']) || empty($inputs['token'])) {
+            return $this->sendCustomResponse(401, 'Unauthorized request');
+        }
+
+        $clientId = $this->authenticateUser($inputs['token']);
+
+        if (!isset($inputs['networkId']) || empty($inputs['networkId'])) {
+            return $this->sendCustomResponse(400, 'Required network id');
+        }
+
+        return $this->removeNetworkFile($inputs['networkId']);
+    }
+
     /**
     *   THIS NEEDS TO APPEND TO THE FILE TOO!!!
     */
@@ -47,6 +64,20 @@ class PrivateNetworkController extends Controller
         foreach ($edgeDataList as $edgeNode) {
             $this->insertNetworkDynamics($clientId, $inputs['networkId'], $edgeNode[0], $edgeNode[1], $edgeNode[2]);
         }
+    }
+
+    private function removeNetworkFile($networkID)
+    {
+        $encodedName = base64_decode($networkID);
+        $rawName = rawurldecode($encodedName);
+        $fullpath = preg_replace('/\/api$/', '', getcwd());
+        try {
+            unlink($fullpath . "/server/php/files/" . $rawName);
+        }
+        catch (\Exception $e) {
+            return ["error" => "unable to delete file '" . $rawName . "'"];
+        }
+        return ["message" => "sucessfully deleted " . $rawName];
     }
 
     private function insertNetworkDynamics($clientId, $networkId, $currentNode, $nextNode, $parentNode)

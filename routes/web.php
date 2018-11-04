@@ -43,6 +43,11 @@ $router->post('modify_network',  [
     //'middleware' => "scope:all"
 ]);
 
+$router->post('delete_network',  [
+    'uses'       => 'PrivateNetworkController@deleteFile'//,
+    //'middleware' => "scope:all"
+]);
+
 
 
 // Need to figure this out...
