@@ -24,7 +24,7 @@
     <script type="text/javascript" src="vis/dist/vis.js"></script>
     <link href="vis/dist/vis-network.min.css" rel="stylesheet" type="text/css"/>
 </head>
-<body onLoad="load_new_network('attractor%20%287%29.csv.json')">
+<body onLoad="load_new_network('attractor.csv.json')">
     <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -123,7 +123,7 @@
           improvedLayout: true
         },
         physics: {
-          stabilization: true,
+          stabilization: false,
           minVelocity: 1,
           maxVelocity: 20,
           timestep: 1

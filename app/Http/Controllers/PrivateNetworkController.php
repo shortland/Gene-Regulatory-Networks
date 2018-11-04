@@ -33,9 +33,6 @@ class PrivateNetworkController extends Controller
         return $this->removeNetworkFile($inputs['networkId']);
     }
 
-    /**
-    *   THIS NEEDS TO APPEND TO THE FILE TOO!!!
-    */
     public function modify(Request $request)
     {
         $inputs = $request->all();
@@ -61,23 +58,51 @@ class PrivateNetworkController extends Controller
             return $this->sendCustomResponse(400, 'Edgelist must be array');
         }
 
+        $this->appendNetworkFile($inputs['networkId'], $edgeDataList);
+
         foreach ($edgeDataList as $edgeNode) {
             $this->insertNetworkDynamics($clientId, $inputs['networkId'], $edgeNode[0], $edgeNode[1], $edgeNode[2]);
         }
     }
 
-    private function removeNetworkFile($networkID)
+    private function appendNetworkFile($networkId, $edgeDataList)
     {
-        $encodedName = base64_decode($networkID);
-        $rawName = rawurldecode($encodedName);
-        $fullpath = preg_replace('/\/api$/', '', getcwd());
+        $fullPath = $this->getNetworkFilePath($networkId);
+        $fileData = json_decode(file_get_contents($fullPath), TRUE);
+        foreach ($edgeDataList as $edgeNode) {
+            $fileData['nodes'][] = [
+                "group" => (string)$edgeNode[2],
+                "id" => (string)$edgeNode[0],
+                "title" => "Node Id: ".$edgeNode[0]."<br>Destination Id: " . $edgeNode[1]
+            ];
+
+            $fileData['edges'][] = [
+                "from" => (string)$edgeNode[0],
+                "to" => (string)$edgeNode[1]
+            ];
+        }
+
+        file_put_contents($fullPath, json_encode($fileData));
+    }
+
+    private function removeNetworkFile($networkId)
+    {
+        $fullPath = $this->getNetworkFilePath($networkId);
         try {
-            unlink($fullpath . "/server/php/files/" . $rawName);
+            unlink($fullPath);
         }
         catch (\Exception $e) {
-            return ["error" => "unable to delete file '" . $rawName . "'"];
+            return ["error" => "unable to delete '" . $networkId . "'"];
         }
-        return ["message" => "sucessfully deleted " . $rawName];
+        return ["message" => "sucessfully deleted " . $networkId];
+    }
+
+    private function getNetworkFilePath($networkId)
+    {
+        $encodedName = base64_decode($networkId);
+        $rawName = rawurldecode($encodedName);
+        $cwdPath = preg_replace('/\/api$/', '', getcwd());
+        return rawurldecode($cwdPath . "/server/php/files/" . $rawName);
     }
 
     private function insertNetworkDynamics($clientId, $networkId, $currentNode, $nextNode, $parentNode)

@@ -26,7 +26,7 @@ with open("%s" % filename) as csv_file:
 
         data['nodes'].append({
             "id": row[0],
-            "title": "Node Id: %s<br>Parent Id: %s" % (str(row[0]), str(row[1])),
+            "title": "Node Id: %s<br>Destination Id: %s" % (str(row[0]), str(row[1])),
             "group": row[2],
         })
 
