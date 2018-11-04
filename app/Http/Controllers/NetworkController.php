@@ -56,7 +56,17 @@ class NetworkController extends Controller
 
         $clientToken = $this->generateNewCode();
 
-        $this->setNewToken($inputs['client_id'], $inputs['client_secret'], $clientToken);
+        $tokenAfterSet = $this->setNewToken($inputs['client_id'], $inputs['client_secret'], $inputs['code'], $clientToken);
+
+        if ($tokenAfterSet !== $clientToken) {
+            return $this->sendCustomResponse(500, [
+                'error' => [
+                    'message' => 'Unable to set token. Make sure you are using the correct credentials.',
+                    'expected' => $clientToken,
+                    //'actual' => $tokenAfterSet,
+                ]
+            ]);
+        }
 
         return $this->sendCustomResponse(200, ['token' => $clientToken]);
     }
@@ -86,7 +96,7 @@ class NetworkController extends Controller
             
             $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             
-            $sql = "UPDATE `networks_users` SET `clientCode` = '$code' WHERE `clientId` = '$clientId'";
+            $sql = "UPDATE `networks_users` SET `clientCode` = '$code', `userToken` = NULL WHERE `clientId` = '$clientId'";
             
             $stmt = $conn->prepare($sql);
             $stmt->execute();
@@ -115,7 +125,7 @@ class NetworkController extends Controller
     /**
     *   TODO: TEMPORARY!!!
     */ 
-    public function setNewToken($clientId, $clientSecret, $code) 
+    public function setNewToken($clientId, $clientSecret, $code, $token) 
     {
         $servername = env('DB_HOST', 'mysql'); 
         $username = env('DB_USERNAME', 'mysql');
@@ -127,7 +137,7 @@ class NetworkController extends Controller
             
             $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             
-            $sql = "UPDATE `networks_users` SET `clientCode` = '$code' WHERE `clientId` = '$clientId' AND `userSecret` = '$clientSecret'";
+            $sql = "UPDATE `networks_users` SET `clientCode` = NULL, `userToken` = '$token' WHERE `clientId` = '$clientId' AND `userSecret` = '$clientSecret' AND `clientCode` = '$code'";
             
             $stmt = $conn->prepare($sql);
             $stmt->execute();
@@ -136,7 +146,22 @@ class NetworkController extends Controller
             return $e->getMessage();
         }
 
+        try {
+            $sql = "SELECT `userToken` FROM `networks_users` WHERE `clientId` = '$clientId' AND `userSecret` = '$clientSecret'";
+            
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+
+            $result = $stmt->setFetchMode(\PDO::FETCH_ASSOC); 
+            $currentToken = $stmt->fetchAll()[0]['userToken'];
+
+        }
+        catch(PDOException $e) {
+            return $e->getMessage();
+        }
+
         $conn = null;
+        return $currentToken;
     }
 
 }
