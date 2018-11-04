@@ -26,6 +26,14 @@ $("#controls_toggle_options").click(function() {
 	}
 });
 
+$("#controls_toggle_api").click(function() {
+	$("#exampleModalLabel").html("API Stream");
+	$(".modal_items").hide();
+	if (!$("#view_stream_selection").is(":visible")) {
+		$("#view_stream_selection").show();
+	}
+});
+
 $("#radial").click(function() {
 	alert("Not yet implemented.");
 });

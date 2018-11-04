@@ -24,7 +24,7 @@
     <script type="text/javascript" src="vis/dist/vis.js"></script>
     <link href="vis/dist/vis-network.min.css" rel="stylesheet" type="text/css"/>
 </head>
-<body>
+<body onLoad="load_new_network('attractor%20%287%29.csv.json')">
     <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -39,6 +39,7 @@
                 <ul class="nav navbar-nav">
                     <li><a href="#upload" id="controls_toggle_upload" data-toggle="modal" data-target="#controlsModal">Upload</a></li>
                     <li><a href="#select" id="controls_toggle_select" data-toggle="modal" data-target="#controlsModal">Select Data File</a></li>
+                    <li><a href="#options" id="controls_toggle_api" data-toggle="modal" data-target="#controlsModal">API Stream</a></li>
                     <li><a href="#options" id="controls_toggle_options" data-toggle="modal" data-target="#controlsModal">Display Options</a></li>
                     <li><a target="_blank" href="https://github.com/rAntonioh/D3_python_attractor_networks">Source Code</a></li>
 
@@ -124,7 +125,7 @@
         },
         edges: {
           smooth: false,
-          width: 2
+          width: 4
         }
     };
     //network = new vis.Network(container, data, options);
@@ -169,9 +170,17 @@
                 <select class="form-control" id="song_select">
                     <!-- jquery ajax gets this, toolbar.js -->
                 </select>
-                <br><br>
+                <br>
+                <button type="button" class="btn btn-success active" id="load_new_network">Load</button>
+                <br>
             </div>
             <!-- end select-data-file view -->
+
+            <!-- start data stream [view_stream_selection]-->
+            <div id="view_stream_selection" class="modal_items">
+                <h3><input type='text' id='api_stream_id' value='' disabled/></h3>
+            </div>
+            <!-- end data sream -->
 
             <!-- start view options view -->
             <div id="view_display_selection" class="modal_items">
@@ -228,27 +237,39 @@
     <script src="js/jquery.fileupload-video.js"></script>
     <!-- The File Upload validation plugin -->
     <script src="js/jquery.fileupload-validate.js"></script>
+    <!-- base64 -->
+    <script src="js/base64.js"></script>
     <script>
-    function changeCursor(newCursorStyle){
-      networkCanvas.style.cursor = newCursorStyle;
-    }
-    $.getJSON( "server/php/files/attractor%20%287%29.csv.json", function( data ) {
-      nodes = data['nodes'];
-      edges = data['edges'];
-      
-      // $.each( node_list, function( key, value ) {
-      //   nodes.push(value);
-      // });
-
-      // $.each( edge_list, function( key, value ) {
-      //   edges.push(value);
-      // });
-
-      network = new vis.Network(container, data, options);
-      network.on('hoverNode', function () {
-        changeCursor('grab');
-      });
+    $("#load_new_network").click(function(){
+      //alert($("#song_select").val());
+      //alert(Base64.encode($("#song_select").val()));
+      load_new_network($("#song_select").val());
     });
+
+    function load_new_network(fileName) {
+      $.getJSON( "server/php/files/" + fileName, function( data ) {
+        var network_id = Base64.encode(decodeURI(fileName));
+        $("#api_stream_id").val(network_id);
+        nodes = data['nodes'];
+        edges = data['edges'];
+        network = new vis.Network(container, data, options);
+      });
+    }
+
+    // $.getJSON( "server/php/files/attractor%20%287%29.csv.json", function( data ) {
+    //   nodes = data['nodes'];
+    //   edges = data['edges'];
+      
+    //   // $.each( node_list, function( key, value ) {
+    //   //   nodes.push(value);
+    //   // });
+
+    //   // $.each( edge_list, function( key, value ) {
+    //   //   edges.push(value);
+    //   // });
+
+    //   network = new vis.Network(container, data, options);
+    // });
     /**
     *   Part of jQuery-File-Upload,
     *   Below script must be after the inclusion of the necessary .js files for this lib
