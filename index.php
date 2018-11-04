@@ -89,8 +89,12 @@
 <script type="text/javascript">
     var color = 'gray';
     var len = undefined;
-    var nodes = [];
-    var edges = [];
+    var network;
+    var nodes = new vis.DataSet();
+    nodes.on('*', function () {
+        console.log("node event listener triggered");
+    });
+    var edges = new vis.DataSet();
 
     // create a network
     var container = document.getElementById('mynetwork');
@@ -100,6 +104,7 @@
     };
 
     var options = {
+        autoResize: true,
         nodes: {
             shape: 'dot',
             // size: 30,
@@ -118,7 +123,7 @@
           improvedLayout: true
         },
         physics: {
-          stabilization: false,
+          stabilization: true,
           minVelocity: 1,
           maxVelocity: 20,
           timestep: 1
@@ -239,21 +244,29 @@
     <script src="js/jquery.fileupload-validate.js"></script>
     <!-- base64 -->
     <script src="js/base64.js"></script>
-    <!-- polling -->
-    <script src="js/api.polling.js"></script>
+    <!-- modify vis network functionality -->
+    <script src="js/visjs.modify-network.js"></script>
     <script>
+    var updateTimestamp = Math.floor(Date.now() / 1000);
     $("#load_new_network").click(function() {
       load_new_network($("#song_select").val());
     });
 
     function load_new_network(fileName) {
+      nodes.clear();
+      edges.clear();
+      updateTimestamp = Math.floor(Date.now() / 1000);
       $.getJSON( "server/php/files/" + fileName, function( data ) {
         var network_id = Base64.encode(encodeURI(fileName));
         $("#api_stream_id").val(network_id);
-        nodes = data['nodes'];
-        edges = data['edges'];
-        network = new vis.Network(container, data, options);
+        nodes.add(data['nodes']);
+        edges.add(data['edges']);
+        network.redraw();
+        network.fit();
       });
+      setTimeout(function(){network.fit()}, 15000);
+      setTimeout(function(){network.fit()}, 20000);
+      //setTimeout(function(){network.fit()}, 30000);
     }
 
     /**
@@ -362,10 +375,14 @@
             .parent().addClass($.support.fileInput ? undefined : 'disabled');
     });
     </script>
-
+    <!-- polling, insert after load_new_network -->
+    <script src="js/api.polling.js"></script>
     <!--
         This must be the last "script" included...
     -->
     <!-- <script type="text/javascript" src="js/vis.js"></script> -->
+    <script>
+        network = new vis.Network(container, data, options);
+    </script>
 </body>
 </html>

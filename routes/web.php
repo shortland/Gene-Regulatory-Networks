@@ -33,6 +33,11 @@ $router->get('list_networks',  [
     //'middleware' => "scope:all"
 ]);
 
+$router->get('get_network_changes',  [
+    'uses'       => 'PublicNetworkController@changesAfterEpoch'//,
+    //'middleware' => "scope:all"
+]);
+
 $router->post('modify_network',  [
     'uses'       => 'PrivateNetworkController@modify'//,
     //'middleware' => "scope:all"

@@ -16,6 +16,9 @@ class PrivateNetworkController extends Controller
         return str_random('32');;
     }
 
+    /**
+    *   THIS NEEDS TO APPEND TO THE FILE TOO!!!
+    */
     public function modify(Request $request)
     {
         $inputs = $request->all();
