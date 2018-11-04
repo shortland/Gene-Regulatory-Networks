@@ -1,8 +1,0 @@
-Homestead.json
-Homestead.yaml
-.env
-/.vagrant/
-/vendor/
-/.idea/
-/storage/*.key
-composer.lock
