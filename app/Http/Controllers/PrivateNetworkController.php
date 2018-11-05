@@ -16,6 +16,23 @@ class PrivateNetworkController extends Controller
         return str_random('32');;
     }
 
+    public function createFile(Request $request)
+    {
+        $inputs = $request->all();
+
+        if (!isset($inputs['token']) || empty($inputs['token'])) {
+            return $this->sendCustomResponse(401, 'Unauthorized request');
+        }
+
+        $clientId = $this->authenticateUser($inputs['token']);
+
+        if (!isset($inputs['networkName']) || empty($inputs['networkName'])) {
+            return $this->sendCustomResponse(400, 'Required network name');
+        }
+
+        return $this->createNetworkFile($inputs['networkName']);
+    }
+
     public function deleteFile(Request $request)
     {
         $inputs = $request->all();
@@ -63,6 +80,8 @@ class PrivateNetworkController extends Controller
         foreach ($edgeDataList as $edgeNode) {
             $this->insertNetworkDynamics($clientId, $inputs['networkId'], $edgeNode[0], $edgeNode[1], $edgeNode[2]);
         }
+
+        return ['message' => 'Network successfully updated'];
     }
 
     private function appendNetworkFile($networkId, $edgeDataList)
@@ -85,6 +104,28 @@ class PrivateNetworkController extends Controller
         file_put_contents($fullPath, json_encode($fileData));
     }
 
+    private function createNetworkFile($networkName)
+    {
+        $networkName .= ".csv.json";
+        $urlEncodeName = rawurlencode($networkName);
+        $encodedName = base64_encode($urlEncodeName);
+        $cwdPath = preg_replace('/\/api$/', '', getcwd());
+
+        try {
+            if (file_exists($cwdPath . "/server/php/files/" . $networkName)) {
+                return ["error" => "File already exists with given name"];
+            }
+            $file = fopen($cwdPath . "/server/php/files/" . $networkName, "w");
+            fwrite($file, '{"nodes":[], "edges":[]}');
+            fclose($file);
+            chmod($cwdPath . "/server/php/files/" . $networkName, 0777);
+        }
+        catch (\Exception $e) {
+            return ["error" => "Unable to create '" . $networkName . "'"];
+        }
+        return ["message" => "Sucessfully created network.", "networkId" => $encodedName];
+    }
+
     private function removeNetworkFile($networkId)
     {
         $fullPath = $this->getNetworkFilePath($networkId);
@@ -92,9 +133,9 @@ class PrivateNetworkController extends Controller
             unlink($fullPath);
         }
         catch (\Exception $e) {
-            return ["error" => "unable to delete '" . $networkId . "'"];
+            return ["error" => "Unable to delete '" . $networkId . "'"];
         }
-        return ["message" => "sucessfully deleted " . $networkId];
+        return ["message" => "Sucessfully deleted " . $networkId];
     }
 
     private function getNetworkFilePath($networkId)
