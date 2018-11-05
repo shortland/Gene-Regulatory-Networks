@@ -24,7 +24,8 @@
     <script type="text/javascript" src="vis/dist/vis.js"></script>
     <link href="vis/dist/vis-network.min.css" rel="stylesheet" type="text/css"/>
 </head>
-<body onLoad="load_new_network('attractor.csv.json')">
+
+<body onLoad="load_new_network('Default.csv.json')">
     <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -44,103 +45,15 @@
                     <li><a target="_blank" href="https://github.com/rAntonioh/D3_python_attractor_networks">Source Code</a></li>
 
                 </ul>
-<!--                 <ul class="nav navbar-nav">
-                    <li>Current: demo_data.json</li>
-                </ul> -->
             </div>
         </div>
     </div>
+
     <div id="container" class="container">
-        <!-- 
-        <header>
-          <h1>&nbsp;Attractor Network</h1>
-        </header> 
-        -->
-        <!--
-          Nodes are sized based on "playcounts"
-          Nodes are colored by "artist"
-        -->
-
-        <div id="controls">
-
-    <!--
-          <div id="filters" class="control">
-            <h3>Filter</h3>
-            <a id="all" class="active">All</a>
-            <a id="popular">Popular</a>
-            <a id="obscure">Obscure</a>
-          </div>
-          <div id="sorts" class="control">
-            <h3>Sort</h3>
-            <a id="songs" class="active">Songs</a>
-            <a id="links">Links</a>
-          </div>
-    -->
-    <!--
-          <div id="search_section" class="control">
-            <form id="search_form" action=""  method="post">
-              <p class="search_title">Search <input type="text" class="text-input" id="search" value="" /></p>
-            </form>
-          </div>
-    -->
-            <div id="main" role="main">
-                <div id="mynetwork"></div>
-<!--<script id="dynamic_data" type="application/json" src="server/php/files/attractor (4).csv.json"></script>-->
-<script type="text/javascript">
-    var color = 'gray';
-    var len = undefined;
-    var network;
-    var nodes = new vis.DataSet();
-    nodes.on('*', function () {
-        console.log("node event listener triggered");
-    });
-    var edges = new vis.DataSet();
-
-    // create a network
-    var container = document.getElementById('mynetwork');
-    var data = {
-        nodes: nodes,
-        edges: edges
-    };
-
-    var options = {
-        autoResize: true,
-        nodes: {
-            shape: 'dot',
-            // size: 30,
-            font: {
-                size: 24,
-                color: '#000'
-            },
-            borderWidth: 1
-        },
-        interaction: {
-            navigationButtons: true,
-            keyboard: true,
-            zoomView: false
-        },
-        layout: {
-          improvedLayout: true
-        },
-        physics: {
-          stabilization: false,
-          minVelocity: 1,
-          maxVelocity: 20,
-          timestep: 1
-        },
-        edges: {
-          smooth: false,
-          width: 4
-        }
-    };
-    //network = new vis.Network(container, data, options);
-</script>
-                
-            </div>
-        </div> 
-        <!-- end controls -->
+        <div id="main" role="main">
+            <div id="mynetwork"></div>
+        </div>
     </div> 
-    <!-- end container -->
 
     <!-- start modal -->
     <div class="modal fade" id="controlsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -183,7 +96,7 @@
 
             <!-- start data stream [view_stream_selection]-->
             <div id="view_stream_selection" class="modal_items">
-                <h3><input type='text' id='api_stream_id' value='' disabled/></h3>
+                <h3>Network ID<p><input type='text' id='api_stream_id' value=''/></p></h3>
             </div>
             <!-- end data sream -->
 
@@ -207,19 +120,60 @@
       </div>
     </div>
     <!-- end modal -->
+    <script type="text/javascript">
+        var color = 'gray';
+        var len = undefined;
+        var network;
+        var nodes = new vis.DataSet();
+        nodes.on('*', function () {
+            console.log("node event listener triggered");
+        });
+        var edges = new vis.DataSet();
+
+        // create a network
+        var container = document.getElementById('mynetwork');
+        var data = {
+            nodes: nodes,
+            edges: edges
+        };
+
+        var options = {
+            autoResize: true,
+            nodes: {
+                shape: 'dot',
+                font: {
+                    size: 24,
+                    color: '#000'
+                },
+                borderWidth: 1
+            },
+            interaction: {
+                navigationButtons: true,
+                keyboard: true,
+                zoomView: false
+            },
+            layout: {
+              improvedLayout: true
+            },
+            physics: {
+              stabilization: false,
+              minVelocity: 1,
+              maxVelocity: 20,
+              timestep: 1
+            },
+            edges: {
+              smooth: false,
+              width: 4
+            }
+        };
+    </script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
+    
     <script src="js/toolbar.js"></script>
-
-    <!-- https://flowingdata.com/2012/08/02/how-to-make-an-interactive-network-visualization/ -->
     <script defer src="js/plugins.js"></script>
-    <script defer src="js/script.js"></script>
-    <!-- <script src="js/libs/coffee-script.js"></script> -->    
-    <!-- <script src="js/libs/d3.v2.js"></script> -->
     <script src="js/Tooltip.js"></script>
-
-    <!-- https://github.com/blueimp/jQuery-File-Upload -->
+    
     <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
     <script src="js/vendor/jquery.ui.widget.js"></script>
     <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
@@ -266,7 +220,6 @@
       });
       setTimeout(function(){network.fit()}, 15000);
       setTimeout(function(){network.fit()}, 20000);
-      //setTimeout(function(){network.fit()}, 30000);
     }
 
     /**
@@ -377,10 +330,7 @@
     </script>
     <!-- polling, insert after load_new_network -->
     <script src="js/api.polling.js"></script>
-    <!--
-        This must be the last "script" included...
-    -->
-    <!-- <script type="text/javascript" src="js/vis.js"></script> -->
+    <!-- This must be the last "script" included... -->
     <script>
         network = new vis.Network(container, data, options);
     </script>

@@ -37,3 +37,5 @@ $("#controls_toggle_api").click(function() {
 $("#radial").click(function() {
 	alert("Not yet implemented.");
 });
+
+$("input:text").focus(function() { $(this).select(); } );
