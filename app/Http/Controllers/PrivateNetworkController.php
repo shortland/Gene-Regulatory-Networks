@@ -20,6 +20,8 @@ class PrivateNetworkController extends Controller
     {
         $inputs = $request->all();
 
+        $this->logApiAction($request);
+
         if (!isset($inputs['token']) || empty($inputs['token'])) {
             return $this->sendCustomResponse(401, 'Unauthorized request');
         }
@@ -50,6 +52,8 @@ class PrivateNetworkController extends Controller
     {
         $inputs = $request->all();
 
+        $this->logApiAction($request);
+
         if (!isset($inputs['token']) || empty($inputs['token'])) {
             return $this->sendCustomResponse(401, 'Unauthorized request');
         }
@@ -71,6 +75,8 @@ class PrivateNetworkController extends Controller
     {
         $inputs = $request->all();
 
+        $this->logApiAction($request);
+
         if (!isset($inputs['token']) || empty($inputs['token'])) {
             return $this->sendCustomResponse(401, 'Unauthorized request');
         }
@@ -91,6 +97,8 @@ class PrivateNetworkController extends Controller
     public function modify(Request $request)
     {
         $inputs = $request->all();
+
+        $this->logApiAction($request);
 
         if (!isset($inputs['token']) || empty($inputs['token'])) {
             return $this->sendCustomResponse(401, 'Unauthorized request');
@@ -124,6 +132,33 @@ class PrivateNetworkController extends Controller
         }
         
         return ['message' => 'Network successfully updated'];
+    }
+
+    private function logApiAction(Request $request)
+    {
+        $servername = env('DB_HOST', 'mysql'); 
+        $username = env('DB_USERNAME', 'mysql');
+        $password = env('DB_PASSWORD', 'mysql');
+        $dbname = env('DB_DATABASE', 'mysql');
+
+        try {
+            $conn = new \PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+            
+            $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
+            $sql = "INSERT INTO `networks_api_log` (`rawData`) VALUES ('$request')";
+            
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+
+            $result = $stmt->setFetchMode(\PDO::FETCH_ASSOC);
+        }
+        catch(PDOException $e) {
+            return $e->getMessage();
+        }
+
+        $conn = null;
+        return;  
     }
 
     private function renameFileById($networkId, $networkNewName)
