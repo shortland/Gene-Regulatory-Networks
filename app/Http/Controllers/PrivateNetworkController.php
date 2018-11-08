@@ -167,7 +167,12 @@ class PrivateNetworkController extends Controller
         $rawName = rawurlencode($networkNewName);
         $newNetworkId = base64_encode($rawName);
         $newNetworkFullPath = $this->getNetworkFilePath($newNetworkId) . '.csv.json';
-        return rename($fullPath, $newNetworkFullPath);
+        try {
+            return rename($fullPath, $newNetworkFullPath);
+        }
+        catch (\Exception $e) {
+            return false;
+        }
     }
 
     private function appendNetworkFile($networkId, $edgeDataList)
