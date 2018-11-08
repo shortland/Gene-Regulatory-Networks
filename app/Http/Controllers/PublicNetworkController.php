@@ -18,7 +18,11 @@ class PublicNetworkController extends Controller
         $jsonFiles = [];
         foreach ($files as $file) {
             if (preg_match('/\.csv\.json$/', $file)) {
-                $jsonFiles[] = $file;
+                $jsonFiles[] = [
+                    'name' => $file,
+                    'id' => base64_encode(rawurlencode($file)),
+                    //'modified' => date("F d, H:i", filemtime(__FULL_FILE_PATH__))
+                ];
             }
         }
         return ['network_list' => $jsonFiles];

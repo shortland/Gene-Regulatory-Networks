@@ -26,6 +26,10 @@ class PrivateNetworkController extends Controller
 
         $clientId = $this->authenticateUser($inputs['token']);
 
+        if (strlen($clientId) !== 32) {
+            return "Invalid authentication";
+        }
+
         if (!isset($inputs['networkName']) || empty($inputs['networkName'])) {
             return $this->sendCustomResponse(400, 'Required network name');
         }
@@ -43,6 +47,10 @@ class PrivateNetworkController extends Controller
 
         $clientId = $this->authenticateUser($inputs['token']);
 
+        if (strlen($clientId) !== 32) {
+            return "Invalid authentication";
+        }
+
         if (!isset($inputs['networkId']) || empty($inputs['networkId'])) {
             return $this->sendCustomResponse(400, 'Required network id');
         }
@@ -59,6 +67,10 @@ class PrivateNetworkController extends Controller
         }
 
         $clientId = $this->authenticateUser($inputs['token']);
+
+        if (strlen($clientId) !== 32) {
+            return "Invalid authentication";
+        }
 
         if (!isset($inputs['networkId']) || empty($inputs['networkId'])) {
             return $this->sendCustomResponse(400, 'Required network id');
@@ -80,7 +92,7 @@ class PrivateNetworkController extends Controller
         foreach ($edgeDataList as $edgeNode) {
             $this->insertNetworkDynamics($clientId, $inputs['networkId'], $edgeNode[0], $edgeNode[1], $edgeNode[2]);
         }
-
+        
         return ['message' => 'Network successfully updated'];
     }
 
