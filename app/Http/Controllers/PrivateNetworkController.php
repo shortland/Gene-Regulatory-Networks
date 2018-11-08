@@ -16,6 +16,36 @@ class PrivateNetworkController extends Controller
         return str_random('32');;
     }
 
+    public function renameFile(Request $request)
+    {
+        $inputs = $request->all();
+
+        if (!isset($inputs['token']) || empty($inputs['token'])) {
+            return $this->sendCustomResponse(401, 'Unauthorized request');
+        }
+
+        $clientId = $this->authenticateUser($inputs['token']);
+
+        if (strlen($clientId) !== 32) {
+            return "Invalid authentication";
+        }
+
+        if (!isset($inputs['networkId']) || empty($inputs['networkId'])) {
+            return $this->sendCustomResponse(400, 'Required network id');
+        }
+
+        if (!isset($inputs['networkNewName']) || empty($inputs['networkNewName'])) {
+            return $this->sendCustomResponse(400, 'Required new network name');
+        }
+
+        if ($this->renameFileById($inputs['networkId'], $inputs['networkNewName'])) {
+            return ['message' => 'Network rename successful'];
+        }
+        else {
+            return ['error' => 'Network rename unsuccessful'];
+        }
+    }
+
     public function createFile(Request $request)
     {
         $inputs = $request->all();
@@ -94,6 +124,15 @@ class PrivateNetworkController extends Controller
         }
         
         return ['message' => 'Network successfully updated'];
+    }
+
+    private function renameFileById($networkId, $networkNewName)
+    {
+        $fullPath = $this->getNetworkFilePath($networkId);
+        $rawName = rawurlencode($networkNewName);
+        $newNetworkId = base64_encode($rawName);
+        $newNetworkFullPath = $this->getNetworkFilePath($newNetworkId) . '.csv.json';
+        return rename($fullPath, $newNetworkFullPath);
     }
 
     private function appendNetworkFile($networkId, $edgeDataList)

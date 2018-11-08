@@ -53,6 +53,10 @@ $router->post('create_network',  [
     //'middleware' => "scope:all"
 ]);
 
+$router->post('rename_network', [
+    'uses'       => 'PrivateNetworkController@renameFile'
+]);
+
 
 
 // Need to figure this out...
