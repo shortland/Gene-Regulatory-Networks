@@ -14,20 +14,14 @@ data = defaultdict(list)
 with open("%s" % filename) as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
 
-    #count = 0;
     for row in csv_reader:
-    #    if count == 0:
-    #        count += 1
-    #        continue
-
         print('%s is source %s is target' % (row[0], row[1]))
-
         data['edges'].append({"from": row[0], "to": row[1]})
-
         data['nodes'].append({
             "id": row[0],
             "title": "Node Id: %s<br>Destination Id: %s" % (str(row[0]), str(row[1])),
             "group": row[2],
+            "label": row[0]
         })
 
 json = json.dumps(data)

@@ -106,6 +106,12 @@
                 <button type="button" class="btn btn-success active" id="force">Loose</button>
                 &nbsp;&nbsp;
                 <button type="button" class="btn btn-warning" id="radial">Compact</button>
+                <br><br>
+                <h3>Node Search</h3>
+                <input type="text" id="node_search_field"/>
+                <button type="button" class="btn btn-default" id="search_node_btn">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                </button>
             </div>
             <!-- end view options view -->
             </center>
@@ -204,6 +210,8 @@
     var updateTimestamp = Math.floor(Date.now() / 1000);
     $("#load_new_network").click(function() {
       load_new_network($("#song_select").val());
+      setTimeout(function(){network.fit()}, 15000);
+      setTimeout(function(){network.fit()}, 20000);
     });
 
     function load_new_network(fileName) {
@@ -218,8 +226,6 @@
         network.redraw();
         network.fit();
       });
-      setTimeout(function(){network.fit()}, 15000);
-      setTimeout(function(){network.fit()}, 20000);
     }
 
     /**
