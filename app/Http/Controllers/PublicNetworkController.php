@@ -51,7 +51,7 @@ class PublicNetworkController extends Controller
             $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
             $timediff = $inputs['epoch'];
-            $networkId = preg_replace('/=/', '', $inputs['networkId']);
+            $networkId = $inputs['networkId'];// preg_replace('/=/', '', $inputs['networkId']);
             $sql = "SELECT `nodeCurrentId` as `id`, `nodeNextId` as `next`, `nodeParentId` as `parent` FROM `networks_dynamics` WHERE unix_timestamp(`modifyTimestamp`) > $timediff AND `networkId` = '$networkId'";
             
             $stmt = $conn->prepare($sql);
