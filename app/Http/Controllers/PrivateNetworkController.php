@@ -16,6 +16,65 @@ class PrivateNetworkController extends Controller
         return str_random('32');;
     }
 
+    public function jsonExport(Request $request)
+    {
+        $inputs = $request->all();
+
+        $this->logApiAction($request);
+
+        if (!isset($inputs['token']) || empty($inputs['token'])) {
+            return $this->sendCustomResponse(401, 'Unauthorized request');
+        }
+
+        $clientId = $this->authenticateUser($inputs['token']);
+
+        if (strlen($clientId) !== 32) {
+            return "Invalid authentication";
+        }
+
+        if (!isset($inputs['networkId']) || empty($inputs['networkId'])) {
+            return $this->sendCustomResponse(400, 'Required network id');
+        }
+
+        $fullPath = $this->getNetworkFilePath($inputs['networkId']);
+
+        $fileData = json_decode(file_get_contents($fullPath), TRUE);
+
+        return $fileData;
+    }
+
+    public function csvExport(Request $request)
+    {
+        $inputs = $request->all();
+
+        $this->logApiAction($request);
+
+        if (!isset($inputs['token']) || empty($inputs['token'])) {
+            return $this->sendCustomResponse(401, 'Unauthorized request');
+        }
+
+        $clientId = $this->authenticateUser($inputs['token']);
+
+        if (strlen($clientId) !== 32) {
+            return "Invalid authentication";
+        }
+
+        if (!isset($inputs['networkId']) || empty($inputs['networkId'])) {
+            return $this->sendCustomResponse(400, 'Required network id');
+        }
+
+        $fullPath = $this->getNetworkFilePath($inputs['networkId']);
+
+        $fileData = json_decode(file_get_contents($fullPath), TRUE);
+        $csvArr = [];
+        $count = 0;
+        foreach ($fileData['edges'] as $edgeNode) {
+            $csvArr[] = $edgeNode['from'] . "," . $edgeNode['to'] . "," . $fileData['nodes'][$count]['group'];
+            $count++;
+        }
+        return $csvArr;
+    }
+
     public function renameFile(Request $request)
     {
         $inputs = $request->all();
