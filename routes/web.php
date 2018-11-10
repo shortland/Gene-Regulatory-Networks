@@ -57,6 +57,14 @@ $router->post('rename_network', [
     'uses'       => 'PrivateNetworkController@renameFile'
 ]);
 
+$router->get('export_csv', [
+    'uses'       => 'PrivateNetworkController@csvExport'
+]);
+
+$router->get('export_json', [
+    'uses'       => 'PrivateNetworkController@jsonExport'
+]);
+
 
 
 // Need to figure this out...
