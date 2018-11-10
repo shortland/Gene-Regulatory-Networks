@@ -63,7 +63,12 @@ class PrivateNetworkController extends Controller
             return $this->sendCustomResponse(400, 'Required network id');
         }
 
-        $fullPath = $this->getNetworkFilePath($inputs['networkId']);
+        return $this->csvDirectExport($inputs['networkId']);
+    }
+
+    private function csvDirectExport($networkId)
+    {
+        $fullPath = $this->getNetworkFilePath($networkId);
 
         $fileData = json_decode(file_get_contents($fullPath), TRUE);
         $csvArr = [];
@@ -177,6 +182,10 @@ class PrivateNetworkController extends Controller
             return $this->sendCustomResponse(400, 'Required edgelist data');
         }
 
+        if (!isset($inputs['save']) || empty($inputs['save'])) {
+            $inputs['save'] = 'false';
+        }
+
         $edgeDataList = json_decode(htmlspecialchars_decode($inputs['edgeList']));
         $edgeType = gettype($edgeDataList);
 
@@ -184,7 +193,9 @@ class PrivateNetworkController extends Controller
             return $this->sendCustomResponse(400, 'Edgelist must be array');
         }
 
-        $this->appendNetworkFile($inputs['networkId'], $edgeDataList);
+        if ($inputs['save'] == 'true') {
+            $this->appendNetworkFile($inputs['networkId'], $edgeDataList);
+        }
 
         foreach ($edgeDataList as $edgeNode) {
             $this->insertNetworkDynamics($clientId, $inputs['networkId'], $edgeNode[0], $edgeNode[1], $edgeNode[2]);
