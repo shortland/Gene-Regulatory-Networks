@@ -21,8 +21,8 @@
     <!-- end CSS-->
     <script src="js/libs/modernizr-2.0.6.min.js"></script>
     <script type="text/javascript" src="js/visjs.loadutil.js"></script>
-    <script type="text/javascript" src="vis/dist/vis.js"></script>
-    <link href="vis/dist/vis-network.min.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="js/vis.js"></script>
+    <link href="css/vis-network.min.css" rel="stylesheet" type="text/css"/>
 </head>
 
 <body onLoad="load_new_network('Default.csv.json')">
@@ -165,7 +165,15 @@
               stabilization: false,
               minVelocity: 1,
               maxVelocity: 20,
-              timestep: 1
+              timestep: 1,
+              solver: 'barnesHut'
+            },
+            barnesHut: {
+                damping: 0.0,
+                avoidOverlap: 0.8,
+                springConstant: 0.1,
+                centralGravity: 0.3,
+                gravitationalConstant: -200
             },
             edges: {
               smooth: false,
