@@ -166,14 +166,14 @@
               minVelocity: 1,
               maxVelocity: 20,
               timestep: 1,
-              solver: 'barnesHut'
-            },
-            barnesHut: {
-                damping: 0.0,
-                avoidOverlap: 0.8,
-                springConstant: 0.1,
-                centralGravity: 0.3,
-                gravitationalConstant: -200
+              solver: 'barnesHut',
+            //   barnesHut: {
+            //     damping: 0.2,
+            //     avoidOverlap: 1.0,
+            //     springConstant: 0.1,
+            //     centralGravity: 0.05,
+            //     gravitationalConstant: -2000
+            //   }
             },
             edges: {
               smooth: false,
