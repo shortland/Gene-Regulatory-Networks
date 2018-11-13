@@ -1,4 +1,3 @@
 .env
 server/php/files/*
 server/php/files_backup/*
-vis/*
