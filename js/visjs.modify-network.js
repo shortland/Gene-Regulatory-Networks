@@ -12,7 +12,7 @@ function addNode(nodeId, nodeGroup, nodeTitle = '') {
         });
     }
     catch (err) {
-        alert(err);
+        console.log(err);
     }
 }
 
@@ -24,7 +24,7 @@ function updateNode(nodeId, nodeTitle = '') {
         });
     }
     catch (err) {
-        alert(err);
+        console.log(err);
     }
 }
 
@@ -35,7 +35,7 @@ function removeNode(nodeId) {
         });
     }
     catch (err) {
-        alert(err);
+        console.log(err);
     }
 }
 
@@ -48,7 +48,7 @@ function addEdge(edgeId = (Math.floor(Math.random() * 1000000) + 2000), edgeFrom
         });
     }
     catch (err) {
-        alert(err);
+        console.log(err);
     }
 }
 
@@ -61,7 +61,7 @@ function updateEdge(edgeId = (Math.floor(Math.random() * 1000000) + 2000), edgeF
         });
     }
     catch (err) {
-        alert(err);
+        console.log(err);
     }
 }
 
@@ -72,13 +72,19 @@ function removeEdge(edgeId) {
         });
     }
     catch (err) {
-        alert(err);
+        console.log(err);
     }
 }
 
 $("#search_node_btn").click(function() {
     var newColor = '#' + Math.floor((Math.random() * 255 * 255 * 255)).toString(16);
     try {
+        // oldnode = nodes.get($("#node_search_field").val());
+        // nodes.remove($("#node_search_field").val());
+        // nodes.add(oldnode);
+        // console.log(nodes);
+
+        //alert(nodes['0']['group']);
         //alert(nodes[$("#node_search_field").val()]['group']);
         // Get previous color
         // nodes.update({
@@ -88,7 +94,7 @@ $("#search_node_btn").click(function() {
         // don't change color - instead - enlarge the node border?.?
     }
     catch (err) {
-        alert(err);
+        console.log(err);
     }
     var options = {
         // position: {x:positionx,y:positiony}, // this is not relevant when focusing on nodes
