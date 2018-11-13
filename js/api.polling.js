@@ -11,5 +11,5 @@
 		//network.fit();
 	}
 
-	setTimeout(polling, 5000);
+	setTimeout(polling, 2000);
 })();
