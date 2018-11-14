@@ -16,6 +16,79 @@ class PrivateNetworkController extends Controller
         return str_random('32');;
     }
 
+    /**
+     * TODO
+     */
+    public function nodeDiffs(Request $request)
+    {
+        $inputs = $request->all();
+
+        $this->logApiAction($request);
+
+        if (!isset($inputs['token']) || empty($inputs['token'])) {
+            return $this->sendCustomResponse(401, 'Unauthorized request');
+        }
+
+        $clientId = $this->authenticateUser($inputs['token']);
+
+        if (strlen($clientId) !== 32) {
+            return "Invalid authentication";
+        }
+
+        if (!isset($inputs['oldNetworkId']) || empty($inputs['oldNetworkId'])) {
+            return $this->sendCustomResponse(400, 'Required oldNetworkId');
+        }
+
+        if (!isset($inputs['newNetworkId']) || empty($inputs['newNetworkId'])) {
+            return $this->sendCustomResponse(400, 'Required newNetworkId');
+        }
+
+        // Source data
+        $srcNetworkData = $this->csvDirectExport($inputs['oldNetworkId']);
+
+        // Destination data
+        $destNetworkData = $this->csvDirectExport($inputs['newNetworkId']);
+
+        /**
+         * 1.) iterating through the destination edges[] array
+         * this will update new edges.
+         * 
+         * 2.) it then needs to iterate through destination nodes[] array to add any new nodes
+         * 
+         * X.) The above two rules don't account for when nodes are completely removed and not existent in destNetwork
+         */
+
+        /**
+         * Antonio: nodes are never removed or added
+         * 
+         * ... Only edges are updated/changes 
+         * BUT Node labels/titles would change... (w.e. leave for later since 'label' support is already spottys)
+         */
+
+        /**
+         * This only works if the networks are the same size,
+         * AND
+         * This only works if nodes (ids) are preserved
+         * AND
+         * This only works if the only change is the second and/or third column of a node (to,group)
+         */
+        if (sizeof($destNetworkData) === sizeof($srcNetworkData)) {
+            $differences = [];
+            for ($i = 0; $i < sizeof($destNetworkData); $i++) {
+                if ($destNetworkData[$i] !== $srcNetworkData[$i]) {
+                    $tempData = explode(",", $destNetworkData[$i]);
+                    $tempData = array_map('intval', $tempData); 
+                    $differences[] = $tempData;
+                }
+            }
+        }
+        else {
+            return ['error' => 'network size differences'];
+        }
+
+        return $differences;
+    }
+
     public function jsonExport(Request $request)
     {
         $inputs = $request->all();

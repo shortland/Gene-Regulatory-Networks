@@ -16,41 +16,32 @@ $router->get('/', function () {
     return "API Framework: " . app()->version();
 });
 
-// get new 'clientCode'
-// http://138.197.50.244/network2/rest-api-with-lumen/public/newCode?client_id=x&response_type=code
 $router->get('authorize',  [
     'uses'       => 'NetworkController@newCode'
 ]);
 
-// get new 'API token'
 $router->post('token',  [
-    'uses'       => 'NetworkController@newToken'//,
-    //'middleware' => "scope:all"
+    'uses'       => 'NetworkController@newToken'
 ]);
 
 $router->get('list_networks',  [
-    'uses'       => 'PublicNetworkController@list'//,
-    //'middleware' => "scope:all"
+    'uses'       => 'PublicNetworkController@list'
 ]);
 
 $router->get('get_network_changes',  [
-    'uses'       => 'PublicNetworkController@changesAfterEpoch'//,
-    //'middleware' => "scope:all"
+    'uses'       => 'PublicNetworkController@changesAfterEpoch'
 ]);
 
 $router->post('modify_network',  [
-    'uses'       => 'PrivateNetworkController@modify'//,
-    //'middleware' => "scope:all"
+    'uses'       => 'PrivateNetworkController@modify'
 ]);
 
 $router->post('delete_network',  [
-    'uses'       => 'PrivateNetworkController@deleteFile'//,
-    //'middleware' => "scope:all"
+    'uses'       => 'PrivateNetworkController@deleteFile'
 ]);
 
 $router->post('create_network',  [
-    'uses'       => 'PrivateNetworkController@createFile'//,
-    //'middleware' => "scope:all"
+    'uses'       => 'PrivateNetworkController@createFile'
 ]);
 
 $router->post('rename_network', [
@@ -65,11 +56,14 @@ $router->get('export_json', [
     'uses'       => 'PrivateNetworkController@jsonExport'
 ]);
 
+$router->get('network_diffs', [
+    'uses'       => 'PrivateNetworkController@nodeDiffs'
+]);
 
-
-// Need to figure this out...
-
-// Generate random string
+/**
+*    Need to figure this out...
+*    Generate random string
+*/
 $router->get('appKey', function () {
     return str_random('32');
 });
