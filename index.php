@@ -89,7 +89,7 @@
                     <!-- jquery ajax gets this, toolbar.js -->
                 </select>
                 <br>
-                <button type="button" class="btn btn-success active" id="load_new_network">Load</button>
+                <button type="button" class="btn btn-success active" id="load_new_network" data-dismiss="modal">Load</button>
                 <br>
             </div>
             <!-- end select-data-file view -->
@@ -109,8 +109,23 @@
                 <br><br>
                 <h3>Node Search</h3>
                 <input type="text" id="node_search_field"/>
-                <button type="button" class="btn btn-default" id="search_node_btn">
+                <button type="button" class="btn btn-default" id="search_node_btn" data-dismiss="modal">
                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                </button>
+                <br><br>
+                <h3>Network Transition</h3>
+                <select class="form-control" id="song_select2" class="transition_selection">
+                    <!-- jquery ajax gets this, toolbar.js -->
+                </select>
+                <br>
+                <button type="button" class="btn btn-warning" onClick="alert('Currently unavailable')">Add Another</button>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-success" id="transition_go" data-dismiss="modal">Transition</button>
+                <br><br>
+                <h3>API Refresh (seconds)</h3>
+                <input type="text" id="api_refresh_rate"/>
+                <button type="button" class="btn btn-default" id="set_api_refresh_rate" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                 </button>
             </div>
             <!-- end view options view -->
@@ -214,8 +229,22 @@
     <script src="js/base64.js"></script>
     <!-- modify vis network functionality -->
     <script src="js/visjs.modify-network.js"></script>
-    <script>
+    <script type="text/javascript">
+    /**
+     * Global vars
+     */
+    var network_id;
     var updateTimestamp = Math.floor(Date.now() / 1000);
+    var api_base_url = "https://ilankleiman.com/network2/api";
+    var api_public_token = "5N9GAsQFDvDiug0XvKMhlsm6LRd2gTkN";
+    var api_refresh_rate = 2;
+
+    $("#api_refresh_rate").val(api_refresh_rate);
+
+    $("#set_api_refresh_rate").click(function() {
+        api_refresh_rate = $("#api_refresh_rate").val();
+    });
+
     $("#load_new_network").click(function() {
       load_new_network($("#song_select").val());
       setTimeout(function(){network.fit()}, 15000);
@@ -227,7 +256,7 @@
       edges.clear();
       updateTimestamp = Math.floor(Date.now() / 1000);
       $.getJSON( "server/php/files/" + fileName, function( data ) {
-        var network_id = Base64.encode(encodeURI(fileName));
+        network_id = Base64.encode(encodeURI(fileName));
         $("#api_stream_id").val(network_id);
         nodes.add(data['nodes']);
         edges.add(data['edges']);
@@ -344,6 +373,8 @@
     </script>
     <!-- polling, insert after load_new_network -->
     <script src="js/api.polling.js"></script>
+    <!-- functions for interacting with the api -->
+    <script src="js/api.functions.js"></script>
     <!-- This must be the last "script" included... -->
     <script>
         network = new vis.Network(container, data, options);

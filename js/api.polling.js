@@ -22,7 +22,7 @@
 			updateTimestamp = Math.floor(Date.now() / 1000);
 		});
 	}
-	setTimeout(polling, 2000);
+	setTimeout(polling, (parseInt(api_refresh_rate) * 1000));
 })();
 
 function addEdges(edgeList) {
